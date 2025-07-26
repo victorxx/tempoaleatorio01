@@ -70,6 +70,7 @@
       border-top-left-radius: 20px;
       border-bottom-left-radius: 20px;
       flex-direction: column;
+      white-space: pre-line; /* para quebra de linha no \n */
     }
 
     /* Container do vídeo */
@@ -131,6 +132,45 @@
         height: 250px;
       }
     }
+    #ads {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 350px;
+      height: 400px;
+      background-color: #f1f1f1;
+      border: 2px solid #ccc;
+      padding: 0;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      #ads {
+        width: 90%;
+        left: 5%;
+        right: 5%;
+        height: 180px;
+        bottom: 20px;
+      }
+    }
+
+    /* Botão fechar anúncio */
+    #fecharAds {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 10000;
+    }
   </style>
 </head>
 <body>
@@ -152,27 +192,37 @@
   <!-- Conteúdo aleatório e único -->
   <div id="conteudoUnico">Carregando conteúdo único...</div>
 
+  <!-- Anúncio flutuante (fixo) no canto inferior direito -->
+  <div id="ads">
+    <button id="fecharAds" aria-label="Fechar anúncio">× Fechar</button>
+    <iframe 
+      src="https://propagandaads01.vercel.app/" 
+      width="100%" 
+      height="100%" 
+      style="border: none;" 
+      loading="lazy"
+      title="Anúncio Regional">
+    </iframe>
+  </div>
+
   <!-- Scripts JavaScript -->
   <script>
     // Lista de anúncios (links e textos)
- 
-     const urls = [
-  { url: "https://wa.me/5527999497001", texto: "SEGURO REGIONAL E CONSÓRCIOS" },
-  { url: "https://geocredibnkvitoria.com/", texto: "💰 Crédito rápido em Vitória" },
-  { url: "https://central.dokehost.com.br/aff.php?aff=90", texto: "Hospedagem profissional ES" },
-  { url: "https://hostinger.com.br", texto: "Crie seu site regional com desconto!" },
-  { url: "https://ocomerciobrasileironoticia.blogspot.com/2025/05/erp-profissional-para-empresas.html", texto: "ERP PROFISSIONAL" },
-  { url: "https://jogosantigos472302513.wordpress.com/confira-essas-empresas/", texto: "CONFIRA ESSAS EMPRESAS!" },
-  { url: "https://www.youtube.com/@gamenologia", texto: "confira esse canal" },
-  { url: "https://brasilbrasileiross.blogspot.com/", texto: "portal brasil" },
-  { 
-    url: "https://www.google.com/local/place/fid/0x94ce576cd6370297:0xf3d4ef05e830adbc/photosphere?iu=https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid%3D71IlTdLu2fTAPzRExvEwyw%26cb_client%3Dsearch.gws-prod.gps%26yaw%3D16.277996%26pitch%3D0%26thumbfov%3D100%26w%3D0%26h%3D0&ik=CAISFjcxSWxUZEx1MmZUQVB6UkV4dkV3eXc%3D&sa=X&ved=2ahUKEwiz0JjU9qCOAxXlp5UCHedLJpcQpx96BAgaEBI", 
-    texto: "Problema capilar nós temos a solução" 
-  },
-  { url: "https://www.instagram.com/reel/DHoqFcwRH7x/", texto: "problema capilar nós temos a solução" }
-];
-
-    
+    const urls = [
+      { url: "https://wa.me/5527999497001", texto: "SEGURO REGIONAL E CONSÓRCIOS" },
+      { url: "https://geocredibnkvitoria.com/", texto: "💰 Crédito rápido em Vitória" },
+      { url: "https://central.dokehost.com.br/aff.php?aff=90", texto: "Hospedagem profissional ES" },
+      { url: "https://hostinger.com.br", texto: "Crie seu site regional com desconto!" },
+      { url: "https://ocomerciobrasileironoticia.blogspot.com/2025/05/erp-profissional-para-empresas.html", texto: "ERP PROFISSIONAL" },
+      { url: "https://jogosantigos472302513.wordpress.com/confira-essas-empresas/", texto: "CONFIRA ESSAS EMPRESAS!" },
+      { url: "https://www.youtube.com/@gamenologia", texto: "confira esse canal" },
+      { url: "https://brasilbrasileiross.blogspot.com/", texto: "portal brasil" },
+      { 
+        url: "https://www.google.com/local/place/fid/0x94ce576cd6370297:0xf3d4ef05e830adbc/photosphere?iu=https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid%3D71IlTdLu2fTAPzRExvEwyw%26cb_client%3Dsearch.gws-prod.gps%26yaw%3D16.277996%26pitch%3D0%26thumbfov%3D100%26w%3D0%26h%3D0&ik=CAISFjcxSWxUZEx1MmZUQVB6UkV4dkV3eXc%3D&sa=X&ved=2ahUKEwiz0JjU9qCOAxXlp5UCHedLJpcQpx96BAgaEBI", 
+        texto: "Problema capilar nós temos a solução" 
+      },
+      { url: "https://www.instagram.com/reel/DHoqFcwRH7x/", texto: "problema capilar nós temos a solução" }
+    ];
 
     // Aplica um link aleatório ao banner lateral esquerdo
     function aplicarBanner(idLink) {
@@ -183,8 +233,20 @@
       link.title = item.texto;
     }
 
-    // Carrega dados de clima de Vitória/ES usando Open-Meteo
+    // Carrega dados de clima de Vitória/ES usando Open-Meteo com cache localStorage
     async function carregarTempo() {
+      const CACHE_KEY = 'clima_cache';
+      const CACHE_TEMPO = 60 * 60 * 1000; // 1 hora em milissegundos
+
+      const agora = Date.now();
+      const cache = JSON.parse(localStorage.getItem(CACHE_KEY));
+
+      if (cache && (agora - cache.timestamp < CACHE_TEMPO)) {
+        // Usa dados em cache
+        document.getElementById("tempo").textContent = cache.texto;
+        return;
+      }
+
       try {
         const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-20.3155&longitude=-40.3128&current_weather=true&timezone=America/Sao_Paulo");
         const data = await res.json();
@@ -196,7 +258,15 @@
                      code < 3 ? "Parcialmente nublado" :
                      code < 60 ? "Chuvoso" : "Condição instável";
 
-        document.getElementById("tempo").textContent = `Vitória/ES\n${temp}°C - ${desc}`;
+        const texto = `Vitória/ES\n${temp}°C - ${desc}`;
+        document.getElementById("tempo").textContent = texto;
+
+        // Salva no cache
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          timestamp: agora,
+          texto: texto
+        }));
+
       } catch {
         document.getElementById("tempo").textContent = "Erro ao carregar o clima";
       }
@@ -229,14 +299,18 @@
       document.getElementById("conteudoUnico").textContent = text;
     }
 
-    // Ao carregar a página, executa as funções
+    // Função para fechar o anúncio flutuante
     document.addEventListener("DOMContentLoaded", () => {
       aplicarBanner('leftLink');    // Aplica banner
-      carregarTempo();              // Busca clima
+      carregarTempo();              // Busca clima com cache
       carregarVideoAleatorio();     // Mostra vídeo
       gerarConteudoUnico();         // Cria conteúdo aleatório
+
+      // Evento para fechar anúncio flutuante
+      document.getElementById('fecharAds').addEventListener('click', function() {
+        document.getElementById('ads').style.display = 'none';
+      });
     });
   </script>
-
 </body>
 </html>
